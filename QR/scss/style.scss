@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+body {
+  font-family: 'Montserrat';
+  background: linear-gradient(to top right, #d4aaff, #00ffcc);
+  min-height: 100vh;
+}
+
+.qr-code {
+  border: 1rem solid #fff;
+  width: 99%;
+  height: auto;
+}
+
+textarea {
+  min-height: 13.7rem;
+}
+
+.fadeIn {
+  animation: .5s fadeIn;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
