@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code - Generator</title>
+  <link rel="icon" type="image/png" href="../img/ial.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.0.0-beta.1/css/bootstrap-colorpicker.css'>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+<body>
+<canvas id="canva"></canvas>
+
+<div style="z-index: 1; margin-top: 20px;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="offset-md-3 col-md-6 my-4">
+        <h4 class="fadeIn" style="text-align: center;"><span id="gradient" style="opacity: 0.8; padding: -10px; display: inline-block; border-bottom-left-radius: 50px; border-top-right-radius: 50px; border-top-left-radius: 50px; text-align: center; padding-bottom: 10px;"><svg viewBox="0 0 960 300">
+            <symbol id="s-text">
+              <text text-anchor="middle" x="50%" y="80%">QR Generator</text>
+            </symbol>
+          
+            <g class = "g-ants">
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+            </g>
+          </svg></span></h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="offset-md-3" data-bind="css: QRtext() !== '' ? 'col-md-4' : 'col-md-6'">
+        <form class="fadeIn">
+          <div class="form-group">
+            <textarea class="form-control" type="text" data-bind="textInput: QRtext"></textarea>
+          </div>
+        </form>
+        <div class="row my-4">
+          <div class="col-md-6">
+            <label for="fg-color">Foreground</label>
+            <input class="form-control color-select" id="fg-color" type="text" data-bind="textInput: fg" />
+          </div>
+          <div class="col-md-6">
+            <label for="bg-color">Background</label>
+            <input class="form-control color-select" id="bg-color" type="text" data-bind="textInput: bg" />
+          </div>
+          <div class="col-md-6 my-4">
+            <label for="quality">Quality level</label>
+            <select class="form-control" id="quality" data-bind="options: quality_select, value: quality, optionsText: 'name'"></select>
+          </div>
+          <div class="col-md-6 my-4">
+            <label for="format">Output format</label>
+            <select class="form-control" id="format" data-bind="options: format_select, value: format, optionsText: 'name'"></select>
+          </div>
+        </div>
+        <button class="btn btn-block btn-primary fadeIn" data-bind="click: clearAll">Clear</button>
+      </div>
+      <div class="col-md-2 fadeIn" data-bind="style: { display: QRtext() !== '' ? 'block' : 'none' }"><img class="qr-code"
+          data-bind="attr: {src: QRlink}" /></div>
+    </div>
+  </div>
+</div>
+  <script>
+  var colors = new Array(
+  [62,35,255],
+  [60,255,60],
+  [255,35,98],
+  [45,175,230],
+  [255,0,255],
+  [255,128,0]);
+
+var step = 0;
+//color table indices for: 
+// current color left
+// next color left
+// current color right
+// next color right
+var colorIndices = [0,1,2,3];
+
+//transition speed
+var gradientSpeed = 0.002;
+
+function updateGradient()
+{
+var c0_0 = colors[colorIndices[0]];
+var c0_1 = colors[colorIndices[1]];
+var c1_0 = colors[colorIndices[2]];
+var c1_1 = colors[colorIndices[3]];
+
+var istep = 1 - step;
+var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+var color1 = "#"+((r1 << 16) | (g1 << 8) | b1).toString(16);
+
+var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+var color2 = "#"+((r2 << 16) | (g2 << 8) | b2).toString(16);
+
+ $('#gradient').css({
+   background: "-webkit-gradient(linear, left top, right top, from("+color1+"), to("+color2+"))"}).css({
+    background: "-moz-linear-gradient(left, "+color1+" 0%, "+color2+" 100%)"});
+  
+  step += gradientSpeed;
+  if ( step >= 1 )
+  {
+    step %= 1;
+    colorIndices[0] = colorIndices[1];
+    colorIndices[2] = colorIndices[3];
+    
+    //pick two new target color indices
+    //do not pick the same as the current one
+    colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+    colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+    
+  }
+}
+
+setInterval(updateGradient,10);
+  </script>
+  <script src='https://gist.githubusercontent.com/paulirish/1579671/raw/3d42a3a76ed09890434a07be2212f376959e616f/rAF.js'></script>
+  <script src="js/indexy.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.0.0-beta.1/js/bootstrap-colorpicker.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.7/download.js'></script>
+
+
+
+  <script src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+	<title>Barcode Generator</title>
+	<link rel="icon" type="image/png" href="../img/ial.png" />
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
+  
+  
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <div class="cont">
+	<div class="mouse"></div>
+	<div class="app">
+		<div class="app__bgimg">
+			<div class="app__bgimg-image app__bgimg-image--1">
+			</div>
+			<div class="app__bgimg-image app__bgimg-image--2">
+			</div>
+		</div>
+		<div class="app__img">
+			<img onmousedown="return false" src="img/back.png" alt="city" />
+		</div>
+		
+		<div class="app__text app__text--1">
+			<div class="app__text-line app__text-line--4">Barcode </div>
+			<div class="app__text-line app__text-line--3">Generator</div>
+			<div class="app__text-line app__text-line--2">Project by Illusive Adroits </div>
+			<div class="app__text-line app__text-line--1"><img src="img/ia.png" alt="" /></div>
+		</div>
+		<FORM NAME="UPC">
+		<div class="app__text app__text--2">
+			<div class="app__text-line app__text-line--4">Enter UPC-A<br/><INPUT TYPE="TEXT" id="upcnumber" value="652810119337"id="input-username" class="login-input">
+			</div>
+			<div class="app__text-line app__text-line--3"><INPUT TYPE="Button" Value="Generate Barcode" id="clear" onClick="generateBarcode();" class="btn"></div>
+			<div class="app__text-line app__text-line--2"><div id="container" style="margin:30px,0,0,0;">
+					<span style=""><svg id="upcCode"></svg></span>
+					</div>
+					<button value="" onclick="download()" class="btn1">Save as SVG</button><br><br></div>
+		</FORM>
+		</div>
+	</div>
+	<div class="pages">
+		<ul class='pages__list'>
+			<li data-target='1' class='pages__item pages__item--1 page__item-active'></li>
+			<li data-target='2' class='pages__item pages__item--2'></li>
+		</ul>
+	</div>
+</div>
+<script src='https://d3js.org/d3.v3.min.js'></script>
+
+  
+
+<script  src="js/indexy.js"></script>
+	<script>
+		$( document ).ready(function() {
+  $(".input-login").each(function() { 
+    if ($(this).val() != "") {
+      $(this).parent().addClass("animation");
+    }
+  });
+});
+
+//Add animation when input is focused
+$(".login-input").focus(function(){
+  $(this).parent().addClass("animation animation-color");
+});
+
+//Remove animation(s) when input is no longer focused
+$(".login-input").focusout(function(){
+  if($(this).val() === "")
+    $(this).parent().removeClass("animation");
+  $(this).parent().removeClass("animation-color");
+})
+	</script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>
